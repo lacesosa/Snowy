@@ -17,6 +17,7 @@ import re
 import json
 import aiohttp
 
+# MAKE OR ADD YOUR OWN WORDLISTS
 
 name = ""
 
@@ -2021,5 +2022,6 @@ async def help(ctx):
 
 # MADE BY UZI BITCH 
 # @uzicifer
+
 
 bot.run('USER TOKEN', bot=False) 
