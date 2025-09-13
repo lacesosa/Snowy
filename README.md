@@ -28,6 +28,6 @@ A discord selfbot made by uzi
 
 
 ## ⚠️ Disclaimer 
-This toolkit is provided for educational and testing purposes only, I do not take responsibility for any 
+This repo is provided for educational and testing purposes only, I do not take responsibility for any 
 misuse or violations of Discord’s Terms of Service, Use responsibly.
 
