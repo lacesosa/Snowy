@@ -13,7 +13,7 @@ A discord selfbot made by uzi
 ---
 
 ## 📬 Contact Information 
-- Youtube Channel: [Uzi](www.youtube.com/@uziwtf)
+- Youtube: [Uzi](www.youtube.com/@uziwtf)
 - Telegram: [@lacesosa](https://t.me/lacesosa)
 - Discord: [@uzicifer](https://discord.gg/justice)
 
