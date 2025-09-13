@@ -1,1 +1,7 @@
 python 3.10
+pip install discord.py
+pip install colorama
+pip install psutil
+pip install requests
+pip install aiohttp
+
