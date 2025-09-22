@@ -17,7 +17,7 @@ import re
 import json
 import aiohttp
 
-# MAKE OR ADD YOUR OWN WORDLISTS
+
 
 name = ""
 
@@ -963,7 +963,7 @@ async def react(ctx, user: discord.User, emoji: str):
 async def reactoff(ctx, user: discord.User):
     if user.id in autoreact_users:
         del autoreact_users[user.id]
-        await ctx.send(f"```dreact disabled for {user.name}```")
+        await ctx.send(f"```react disabled for {user.name}```")
     else:
         await ctx.send("```react is off```")    
     await ctx.message.delete()
@@ -1786,12 +1786,6 @@ async def rape(ctx, user: discord.User = None):
 
 
 @bot.command()
-async def justice(ctx):
-    await ctx.send(f"[citymorgue](https://discord.gg/citymorgue)\n[justice](https://discord.gg/justice)")
-    await ctx.message.delete()
-
-
-@bot.command()
 async def z(ctx):
     await ctx.send(f"https://cdn.discordapp.com/attachments/1395225282490667072/1415540751990919299/da3663c176a175053a93bee0a91553e1.gif?ex=68c3948e&is=68c2430e&hm=c3edee1686f1482c42bad7eef2324f1592d21ebd6cb39890541577c6c24863a7&")
     await ctx.send(f"```this is my wife right here fuck nigga```")
@@ -1820,6 +1814,60 @@ async def gay(ctx, member: discord.Member = None):
     await ctx.send(response)
     await ctx.message.delete()
 
+snipes = {}
+edit_snipes = {}
+reaction_snipes = {}
+
+@bot.event
+async def on_message_delete(message):
+    if message.author.bot:
+        return
+    snipes[message.channel.id] = message
+
+@bot.event
+async def on_message_edit(before, after):
+    if before.author.bot:
+        return
+    edit_snipes[before.channel.id] = (before, after)
+
+@bot.event
+async def on_reaction_remove(reaction, user):
+    if user.bot:
+        return
+    reaction_snipes[reaction.message.channel.id] = (reaction, user)
+
+
+@bot.command()
+async def snipe(ctx):
+    msg = snipes.get(ctx.channel.id)
+    if not msg:
+        return await ctx.send("```nothing to snipe```")
+
+    await ctx.send(f"```{msg.author}: {msg.content or '*empty message*'}```")
+
+@bot.command()
+async def esnipe(ctx):
+    data = edit_snipes.get(ctx.channel.id)
+    if not data:
+        return await ctx.send("```nothing to esnipe```")
+
+    before, after = data
+    await ctx.send(
+        f"```{before.author} edited a message:\nbefore: {before.content or '*empty*'}\nafter: {after.content or '*empty*'}```"
+    )
+
+@bot.command()
+async def rsnipe(ctx):
+    data = reaction_snipes.get(ctx.channel.id)
+    if not data:
+        return await ctx.send("```nothing to rsnipe```")
+
+    reaction, user = data
+    await ctx.send(
+        f"```{user} removed their reaction {reaction.emoji}\nfrom a message: {reaction.message.jump_url}```"
+    )
+
+
 # MENU
 
 @bot.remove_command('help') 
@@ -1828,24 +1876,24 @@ async def gay(ctx, member: discord.Member = None):
 async def menu(ctx):
     await ctx.message.delete()
     menu_message = await ctx.send("""```ansi
-         uzi's selfbot           
+         snowy selfbot           
 ╔═════════════════════════════╗
 ║          COMMANDS           ║ 
 ╚═════════════════════════════╝ 
- [page1] ->  multi token        
- [page2] ->  single token       
- [page3] ->  utility            
- [page4] ->  profile            
- [page5] ->  misc                        
+ [tab1] ->  multi token        
+ [tab2] ->  single token       
+ [tab3] ->  utility            
+ [tab4] ->  profile            
+ [tab5] ->  misc                        
  [all]   ->  all cmds           
                                  
  Commands: 54                    
  Made By: Uzi                    ```""")
-    await ctx.send(f"""https://cdn.discordapp.com/icons/1343314850368979076/a_afdd433926ed541f410e1a11ec2eb6f9.gif?size=1024""")
+    await ctx.send(f"""https://tenor.com/view/blizzard-snow-forest-dark-forest-dark-snowing-forest-gif-26760300""")
 
 
 @bot.command()
-async def page1(ctx):
+async def tab1(ctx):
     await ctx.message.delete()
     await ctx.send(f"""
 
@@ -1865,7 +1913,7 @@ async def page1(ctx):
 
 
 @bot.command()
-async def page2(ctx):
+async def tab2(ctx):
     await ctx.message.delete()
     await ctx.send(f"""
 ```╔═════════════════════════════╗
@@ -1885,7 +1933,7 @@ async def page2(ctx):
 
 
 @bot.command()
-async def page3(ctx):
+async def tab3(ctx):
     await ctx.message.delete()
     await ctx.send(f"""
 ```╔═════════════════════════════╗
@@ -1907,11 +1955,14 @@ async def page3(ctx):
 [14] stopmass
 [15] antigc
 [16] typing 
-[17] typingoff ```""")
+[17] typingoff 
+[18] snipe
+[19] esnipe
+[20] rsnipe```""")
 
 
 @bot.command()
-async def page4(ctx):
+async def tab4(ctx):
     await ctx.message.delete()
     await ctx.send(f"""
 ```╔═════════════════════════════╗
@@ -1929,13 +1980,12 @@ async def page4(ctx):
 
 
 @bot.command()
-async def page5(ctx):
+async def tab5(ctx):
     await ctx.message.delete()
     await ctx.send(f"""
 ```╔═════════════════════════════╗
 ║            MISC             ║
-╚═════════════════════════════╝
-[1]  justice                   
+╚═════════════════════════════╝                 
 [2]  swat                 
 [3]  hack                
 [4]  rape                                   
@@ -1951,7 +2001,7 @@ async def all(ctx):
 ║         ALL COMMANDS        ║
 ╚═════════════════════════════╝
 
-PAGE1 - MULTI TOKEN                   
+TAB1 - MULTI TOKEN                   
 [1]   multilast
 [2]   multilastoff
 [3]   gcn
@@ -1963,7 +2013,7 @@ PAGE1 - MULTI TOKEN
 [9]   token
 [10]  rename     
 
-PAGE2 - SINGLE TOKEN              
+TAB2 - SINGLE TOKEN              
 [12]  flood
 [13]  floodoff       
 [14]  ar                 
@@ -1976,7 +2026,7 @@ PAGE2 - SINGLE TOKEN
 [21]  pingoff
 [22]  spam  
 
-PAGE3 - UTILITY
+TAB3 - UTILITY
 [23]  react
 [24]  reactoff
 [25]  dreact
@@ -1993,35 +2043,34 @@ PAGE3 - UTILITY
 [36]  antigc
 [37]  typing
 [38]  typingoff
-                   
-PAGE4 - PROFILE                      
-[39]  rpc
-[40]  rpcoff
-[41]  stream
-[42]  streamoff
-[43]  playing
-[44]  rstatus
-[45]  rstatusoff
-[46]  remoji
-[47]  remojioff
+[39]  snipe
+[40]  esnipe
+[41]  rsnipe
+                    
+TAB4 - PROFILE                      
+[42]  rpc
+[43]  rpcoff
+[44]  stream
+[45]  streamoff
+[46]  playing
+[47]  rstatus
+[48]  rstatusoff
+[49]  remoji
+[50]  remojioff
                                       
-PAGE5 - MISC                    
-[48]  justice                  
-[49]  swat                   
-[50]  hack                
-[51]  rape   
-[52]  dick      
-[53]  gay
-[54]  z  ```""")
+TAB5 - MISC                
+[51]  swat                   
+[52]  hack                
+[53]  rape   
+[54]  dick      
+[55]  gay
+[56]  z  ```""")
 
 @bot.command()
 async def help(ctx):
     await ctx.send(f"""```dm @uzicifer for help if your looking for a menu just type {bot.command_prefix}menu ```""")
     await ctx.message.delete()
 
-
-# MADE BY UZI BITCH 
 # @uzicifer
 
-
-bot.run('USER TOKEN', bot=False) 
+bot.run('your token', bot=False) 
