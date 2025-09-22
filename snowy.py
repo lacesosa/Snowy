@@ -19,7 +19,7 @@ import aiohttp
 
 
 
-name = ""
+name = "ur opps name"
 
 whore_wordlist = [
 ]
@@ -2074,3 +2074,4 @@ async def help(ctx):
 # @uzicifer
 
 bot.run('your token', bot=False) 
+
