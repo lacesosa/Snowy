@@ -1,4 +1,4 @@
-## 🚀 Uzi Selfbot
+## 🚀 Snowy Selfbot
 A discord selfbot made by uzi
 
 ---
