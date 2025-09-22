@@ -19,7 +19,7 @@ import aiohttp
 
 
 
-name = "ur opps name"
+name = ""
 
 whore_wordlist = [
 ]
@@ -1885,7 +1885,7 @@ async def menu(ctx):
  [tab3] ->  utility            
  [tab4] ->  profile            
  [tab5] ->  misc                        
- [all]   ->  all cmds           
+ [all]  ->  all cmds           
                                  
  Commands: 54                    
  Made By: Uzi                    ```""")
@@ -2071,7 +2071,5 @@ async def help(ctx):
     await ctx.send(f"""```dm @uzicifer for help if your looking for a menu just type {bot.command_prefix}menu ```""")
     await ctx.message.delete()
 
-# @uzicifer
 
-bot.run('your token', bot=False) 
-
+bot.run('put your token here', bot=False) 
