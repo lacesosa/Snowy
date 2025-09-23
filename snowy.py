@@ -1,45 +1,172 @@
 import discord
 from discord.ext import commands 
 from discord.ext import tasks, commands
-from colorama import init, Fore, Back, Style
-from collections import defaultdict
-import time
-import random
+from colorama import Fore
 from psutil import users
+import random
 import requests
-import asyncio
-import subprocess
+from collections import defaultdict
 import os
+import aiohttp
+import asyncio
+import re
+import time
+import subprocess
 import string
 import sys
-import time
-import re 
 import json
-import aiohttp
 
 
+black = "\033[30m"
+red = "\033[31m"
+green = "\033[32m"
+yellow = "\033[33m"
+blue = "\033[34m"
+magenta = "\033[35m"
+cyan = "\033[36m"
+white = "\033[37m"
+reset = "\033[0m"  
+pink = "\033[38;2;255;192;203m"
+white = "\033[37m"
+blue = "\033[34m"
+black = "\033[30m"
+light_green = "\033[92m" 
+light_yellow = "\033[93m" 
+light_magenta = "\033[95m" 
+light_cyan = "\033[96m"  
+light_red = "\033[91m"  
+light_blue = "\033[94m"  
 
-name = ""
+www = Fore.WHITE
+mkk = Fore.BLUE
+b = Fore.BLACK
+ggg = Fore.LIGHTGREEN_EX
+y = Fore.LIGHTYELLOW_EX 
+pps = Fore.LIGHTMAGENTA_EX
+c = Fore.LIGHTCYAN_EX
+lr = Fore.LIGHTRED_EX
+qqq = Fore.MAGENTA
+lbb = Fore.LIGHTBLUE_EX
+mll = Fore.LIGHTBLUE_EX
+mjj = Fore.RED
+yyy = Fore.YELLOW
 
-whore_wordlist = [
+name = "ur opps name"
+
+whore_wordlist = ["HOW\nDID\nYOU\nGET\nHOED\nLIKE\nTHAT\nLOLL\nYOUR\nA\nBITCH", "SIGN\nYOUR\nLIFE\nAWAY\nTO\nME\nLOSER\nASS\nPEDO\nLOLL","SHUT\nYOUR\nPUSSY\nASS\nMOUTH\nBITCH", "NIGGA\nGETS\nBULLIED\nON\nDAILY\nBASIS", "TRASH\nNIGGA\nOUTLAST\nME\nRETARD", "MORONIC\nASS\nLITTLE\nFAGGOT\nGET\nBACK\nUP", "WEAL\nASS\nCHAT\nSLAVE\nGET\nDOWN\nFUCK\nBOY", "NEVER\nCOMPETE\nWITH\nA\nGOD", "UR\nMY\nFUCKING\nSON\nPEASENT", "FOCUS\nUP\nRETARDED\nFUCKBOY\nLOLLOL", "NIGGA\nYOU\nCANT\nSTEP\nSHITTY\nLOSER", "SHUT\nTHE\nFUCK\nUP\nBITCHMADE\nLOSER", "LOL\nYOUR\nA\nSHITTY\nCOM\nREJECT\nLOSER", "YOUR\nDYING\nTO\nME\nLMFAOO", "STOP\nSTEPPING\nU\nSLOW\nBRAINED\nMORON", 
+"EGOUL\nMEU\nE MAI\nMARE\nDECÂT\nPUIUL TĂU\nNEGRU", "NU POȚI\nPROGRAMA\nNU\nAI\nNICIO\nȘANSĂ\nÎMPOTRIVA\nMIEI\nPLÂNGE", "MY\nMOM\nTYPES\nFASTER\nTHAN\nTHIS\nWHAT\nTHE\nFUCK\nLMFAOO", "RETARDED\nMORON\nLOL\nUR\nFUCKING\nWORTHLESS", "ILL\nNEVER\nFOLD\nOR\nDIE", "GET\nDROWNED\nBY\nUR\nGOD", "STEP\nTHE\nFUCK\nDOWN\nBEFORE\nA\nREAL\nSTEPPER\nMURDERS\nYOU\nUR\nMY\nLAB\nDOG\nBARK\nFOR\nUR\nGOD\nYOU\nFEMBOY\nYOU\nHAVE\nA\nCUCK\nKINK", "YOUR\nMY\nSEEDLING\nI\nGREW\nYOU\nLIKE\nA\nPLANT\nWEAK\nFUCK\nBOY", "WHO\nIS\nTHIS\nWEAK\nLOWTIER\nCLOWN", "ILL\nTEAR\nYOUR\nGUTS\nOUT\nWEAK\nUGLY\nSLOW\nDORK\nLOLLL", "I\nBROKE\nTHIS\nNIGGAS\nNECK\nLOL\nWEAKLING", 
+"SHUT\nTHE\nFUCK\nUP\nYOU\nCANT\nBEEF\nRETARD", "STREAM\nYOUR\nDEATH\nPETTIE\nFAGGOT", "YOUR\nDYING\nTO\nME\nFRAIL\nSLUT","UP\nME\nA\nPENNY\nPOOR\nPISS\nFUCK", "I\nSTABBED\nTHIS\nNIGGA\nIN\nHIS\nCHEST", "WEAK\nDYSLEXIC\nFUCK\nUR\nHORRID", "WE\nCAN\nGO\nFOREVER\nILL\nMURDER\nYOUR\nBLOODLINE\nDYKE", "NOBODY\nCAN\nSAVE\nYOU\nTRANNY\nDYKE", "YOUR\nA\nPUSSY\nASS\nKID\nWHY\nDID\nU\nSTEP\nAND\nGOT\nPUT\nTHE\nFUCK\nDOWN", "LOL\nYOUR\nJUS\nASS\nAINT\nYOU?😂", "SHUT\nTHE\nFUCK\nUP\nWEAK\nFUCKBOY", "BOW\nDOWN\nTO\nME\nSHITTY\nSLUT", "PEON\nASS\nNIGGA\nASKED\nA\nHOMELESS\nGUY\nFOR\nA\nDOLLAR", "WHO\nGAVE\nTHIS\nNIGGA\nTHE\nMIC\nLMFAOO", 
+"DIRTY\nASS\nHOBO\nLIVES\nIN\nA\nCARDBOARD\nBOX", "WHO\nTHE\nFUCK\nASKED\nBITCHMADE\nLOSER", "UGLY\nASS\nBLACK\nTHUG", "nigga\nbuilt\nlike\na\nsumo\nwreslting\nairplane", "nigga\nyo\ngranny\nlevetaties\nwhen\nshe\nclicks\nher\nankles", "frog\nwith\nvampire\nteeth\nthat\nruns\naway\nfrom\nhumans", " you\nlook\nlike\nan\niguana\nwith\na\nrocket\nboot\non", "YOU\nSHOT\nA\nHOMELESS\nMAN\nFOR\nSELLING\nCANDY", "that\nnigga\nwhitebeard\nthrew\na\npocket\nknife\nat\nyo\ntooth", "YOU\nDORK\nASS\nRUNT\nDONT\nSTEP\nTO\nYOUR\nFOUNDER", "COME\nHERE\nILL\nCHOKE\nYOU\nDIRTY\nHINDU\nIDIAN", "ILL\nFUCKING\nMURDER\nYOU\nWEAK\nSKID", 
+"ILL\nRIP\nYOUR\nINTESTINES\nOUT\nAND\nFEED\nIT\nTO\nMY\nDOG", "SAY\nIT\nWITH\nYOUR\nCHEST\nYOU\nCANT\nHANDLE\nTHE\nGREATEST", "ILL\nMAKE\nYOUR\nLIFE\nFLASH\nDUMB\nCUCK", "NIGGA\nGETS\nBEAT\nBY\nHIS\nDAD\nLOL", "YOU\nFLEX\nWEAKNESS\nAND\nCALL\nIT\nPERSONALITY\nDUMBASS\nNIGGA", "WE\nCOULD\nPUT\nU\nON\nA\nSHIRT\nRETARDED\nFUCKING\nPEDOPHILE", "WEIRD\nASS\nNIGGA\nTALKING\nTO\nME\nLIKE\nWE\nCOOL", "I\nWALK\nIN\nYOU\nVANISH\nTHATS\nREAL\nINFLUENCE", "UR\nA\nDIRTY,\nASS\nNIGGA\nAND\nNOBODY\nCARE", "UR\nMY\nFUCKING\nSON\nNIGGA\nDIED\nAND\nBLEW\nHIS\nFUCKING\nBRAINS\nOUT", "LETS\nALL\nPRAY\nFOR\nTHIS\nNIGGA\nLOOOL", "HOW\nARE\nYOU\nSO\nASS\nNIGGA\nLMAO", 
+"get\nthe\nfuck\ndown\ni\nown\nyou", "TU\nMAMÁ\nES\nMI\nPUTA", "I'll\nrip\nur\nankles\noff\nweak\nbitch", "you\nlook\nlike\na\ndinosaur\nwith\nno\nteeth", "im\ngonna\ntake\nyour\nsoul\nnow", "your\nfucking\nslow\nand\nyour\na\nindian\nloser", "you\nso\nfucking\ntrash\nbitch\nboy", "you\nugly\nas\nfuck boy\nniggas\nwill\nput\nands\non\nyou", "ur\nso\nfucking\ndogshit\nweak\ncuck\nnow\nshut\nthe\nfuck\nup\nlike\nmy\ndog", "you\nsaw\nme\nand\nyo\nbody\nshook\npussy", "yo\nindian\nshut\nthe\nfuck\nup", "Nigga\nyou\nwas\nplaying\nagario\nand\ngot\ndouble\nsplitted\nby\na\nnigga\nnamed\nTimmyTwoThumbs\nboy\nyou\nugly\nass\nretarted\nfuck", 
+"Nigga\nyou\ngot\nbanned\nfrom\nthe\nLGBTQ\nhideout\nbecause\nyou\nsaid\nsaid\nthe\ncolors\nof\nthe\nrainbow\nwere\nugly\nnigga\nyou\nstupid\nas\nfuck\nboy", "ill\nchuck\nyou\nin\na\nriver\nbitch", "even\ncancer\npatients\nhas\nmore\nlife\nthan\nyou", "this\nis\nbad\nyour\nslow\nand\ni\nown\nyou", "weird\nass\nliving\nspecial\ncreature", "ill\nput\nyou\nin\na\nchokehold\nand\nbody\nslam\nyou\nLOL", "ill\nrip\nyour\nscalp\noff\nyour\nskull", "niggas\nwill\nend\nyou\nfaggot\nthot", "slobby\ndepressed\nfuck\nshut\nthe\nfuck\nup", "shut\nthe\nfuck\nup\nyou\nadmitted\nto\nbeing\nmy\ngood\nlittle\nwhore\ndogshit\nfaggot", "nigga\nis\nsprinting\naway\nfrom\nme",
+"ill\nbeat\nthe\nfuck\noutta\nyou", "im\nfaster\nden\nyou\nslow\nlittle\nbitch", "ay\nbitch\nshut\nthe\nfuck\nup\nugly\npussy", "ugly\nass\npedophile\ni\ndont\nfuck\nwith\nyou\nfaggot", "your\nlife\nis\non\n50/50cringe\nbitch", "ill\nhumiliate\nyou\nbitch\nyou\ngot\nhoed\nby\neveryone\ngarbage\nbitch", "ill\nput\na\nrifle\nin\nyour\nmouth\nbitch\nmade\nloser\nLOLL", "you\ngot\nelectrocut\nby\nmy\neel\nloser\ndork", "im\ndissing\nyou\nnow\nwhat\nweak\nass\ndying\nslut", "your\nso\nfucking\nweird\nugly\npedo\nstop\nfucking\nlooking", "ill\nthrow\nyou\nin\na\ndumpster\nslave\ndont\nfucking\ndie\nscumbag", "your\nmy\nloser\nlittle\nbitch\nyour\nass\nas\nfuck\nwhore",
+"pedo\nfuck\nstay\naway\nfrom\nminors\nfucking\ntrash\nbitch", "ay\nfuck\nup\ndogshit\nqueer\ndo\ni\nneeda\nsmack\nthe\nfuck\noutta\nyou", "your\nmother\nisnt\nvisiting\nyour\nfuneral\nlonely\nfuck\nill\ntake\nyour\nsoul\nout\nusing\nmy\nbarehands", "bitchass\nnigga\nill bash ur head in pussy\nyour\nmy\nbitch\nweak\nfuck", "niggas\nwill\nshoot\nyour\nface\noff\nshut\nthe\nfuck\nup\nfat\nbitch", "stop\nbeing\nmy\nbitch\nfaggot\nyour\nass\nson\nand\nyour\naccuracy\nis\nshit" "watch\nthat\nfuckin\nmouth\nfaggot\nbitch\nyour\na\nnerdy\nshithead\nyour\nclit\nstinks\nim\nhere\nto\nkill\nyou", "cow\ndick\neating\nass\nnigga", "skanky\nlittle\nfaggot\nyour\nugly\nas\nfuck\nLOL", 
+"yo\ngreasy\nfaggot\nfuck\nup\nill\nbeat\nthe\nfuck\noutta\nyou", "bitch\nill\nbreak\nyo\nnose\nsit\nthe\nfuck\ndown\nfaggot", "ugly\nfaggot\ndont\nrun\nwhy\nare\nyou\nnot\ndoing\ndamage", "Nigga\nyour\nhead\nlooks\nlike\na\ndorito\nmy\nnigga\nyou\ngot\nthat\nshit\nfrom\nphineas\nand\nferb\ntell\nme\nwhy\ni\nsaw\nyou\nbeating\nyour\ndick\nto\ndora\nthe\nexplora", "I'LL\nLEAVE\nTHIS\nIMPAIRED\nREJECTS\nBODY\nIN\nA\nDITCH", "NIGGA\nDIED\nBY\nFIRING\nSQUAD", "stop\ncrying\nget\nback\nup", "skanky\nlittle\nfaggot\nyour\nugly\nas\nfuck\nLOL", "ill\nmake\nyou\nend\nyour\nlife\nfrail\nass\nbitch", "Cállate\nla\nboca\nsucio\ncriatura\nespecial\nnegro\nEntraste\na\nmi\npaís\nen\nun\ncontenedor",
+"988\nheres\nthe\nsuicide\nhotline\nfrustrated\npedo", "this\nis\nbad\ni\nfucking\nkilled\nyou" "BITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nLOLLOLOOL", "nigga\ni\ncaught\nu\nslapboxing\na\nnigga\nname\ndonitello\nfor\n20\nvbucks\nlike\nshit\nnigga\nyou\nwas\na\nknown\nschool\nthreat\nbecause\nyou\nbrought\na\nbaguette\nto\nschool\nfor\nbring\nyour\npet\nday\nsmelly\nnigga",
+"nigga\nthats\nwhy\nyo\nnipples\nare\nbuilt\nlike\nfour\nleaf\nclovers\nthats\nwhy\byo\nmom\nuse\nto\nuppercut\nyou\nin\nfatboy”, “you\nsmoke\nvapes\nout\nyour\nasshole\nweirdo”, “SORRY\nASS\nNIGGA\nUR\nNOT\nSAFE\nFROM\nME\nWEAK\nVIRGIN\nASS\nNIGGA\nUR\nMISERABLE\nAS\nSHIT\nFUCKING\nFAGGOT\nASS\nPEDO\nLOLOL”, “NIGGA\nHOE\nASS\nNIGGA\nDIRTY\nASS\nNIGGA\nSHUT\nUP\nNIGGA\nYOU\nWASTED\nEIGHT\nYEARS\nOF\nYOUR\nLIFE\nIN\nA\nJUNGLE\nTRYNA\nFIND\nA\nLEGENDARY\nPOKEMON\nMY\nNIGGA\nCAUSE\nYOU\nDIRTY\nAS\nFUCK\nMY\nNIGGA\nYOU\nFEEL\nBURPS\nFORM\nIN\nYO\nTHROAT\nAND\nPISS\nYO\nPANTS\nMY\nNIGGA\nYO\nMOTHER\nIS\nA\nCRACK\nADICT\nLOLOO"
+
 ]
 
-outlast_messages = [
+outlast_messages = ["HOW\nDID\nYOU\nGET\nHOED\nLIKE\nTHAT\nLOLL\nYOUR\nA\nBITCH", "SIGN\nYOUR\nLIFE\nAWAY\nTO\nME\nLOSER\nASS\nPEDO\nLOLL","SHUT\nYOUR\nPUSSY\nASS\nMOUTH\nBITCH", "NIGGA\nGETS\nBULLIED\nON\nDAILY\nBASIS", "TRASH\nNIGGA\nOUTLAST\nME\nRETARD", "MORONIC\nASS\nLITTLE\nFAGGOT\nGET\nBACK\nUP", "WEAL\nASS\nCHAT\nSLAVE\nGET\nDOWN\nFUCK\nBOY", "NEVER\nCOMPETE\nWITH\nA\nGOD", "UR\nMY\nFUCKING\nSON\nPEASENT", "FOCUS\nUP\nRETARDED\nFUCKBOY\nLOLLOL", "NIGGA\nYOU\nCANT\nSTEP\nSHITTY\nLOSER", "SHUT\nTHE\nFUCK\nUP\nBITCHMADE\nLOSER", "LOL\nYOUR\nA\nSHITTY\nCOM\nREJECT\nLOSER", "YOUR\nDYING\nTO\nME\nLMFAOO", "STOP\nSTEPPING\nU\nSLOW\nBRAINED\nMORON", 
+"EGOUL\nMEU\nE MAI\nMARE\nDECÂT\nPUIUL TĂU\nNEGRU", "NU POȚI\nPROGRAMA\nNU\nAI\nNICIO\nȘANSĂ\nÎMPOTRIVA\nMIEI\nPLÂNGE", "MY\nMOM\nTYPES\nFASTER\nTHAN\nTHIS\nWHAT\nTHE\nFUCK\nLMFAOO", "RETARDED\nMORON\nLOL\nUR\nFUCKING\nWORTHLESS", "ILL\nNEVER\nFOLD\nOR\nDIE", "GET\nDROWNED\nBY\nUR\nGOD", "STEP\nTHE\nFUCK\nDOWN\nBEFORE\nA\nREAL\nSTEPPER\nMURDERS\nYOU\nUR\nMY\nLAB\nDOG\nBARK\nFOR\nUR\nGOD\nYOU\nFEMBOY\nYOU\nHAVE\nA\nCUCK\nKINK", "YOUR\nMY\nSEEDLING\nI\nGREW\nYOU\nLIKE\nA\nPLANT\nWEAK\nFUCK\nBOY", "WHO\nIS\nTHIS\nWEAK\nLOWTIER\nCLOWN", "ILL\nTEAR\nYOUR\nGUTS\nOUT\nWEAK\nUGLY\nSLOW\nDORK\nLOLLL", "I\nBROKE\nTHIS\nNIGGAS\nNECK\nLOL\nWEAKLING", 
+"SHUT\nTHE\nFUCK\nUP\nYOU\nCANT\nBEEF\nRETARD", "STREAM\nYOUR\nDEATH\nPETTIE\nFAGGOT", "YOUR\nDYING\nTO\nME\nFRAIL\nSLUT","UP\nME\nA\nPENNY\nPOOR\nPISS\nFUCK", "I\nSTABBED\nTHIS\nNIGGA\nIN\nHIS\nCHEST", "WEAK\nDYSLEXIC\nFUCK\nUR\nHORRID", "WE\nCAN\nGO\nFOREVER\nILL\nMURDER\nYOUR\nBLOODLINE\nDYKE", "NOBODY\nCAN\nSAVE\nYOU\nTRANNY\nDYKE", "YOUR\nA\nPUSSY\nASS\nKID\nWHY\nDID\nU\nSTEP\nAND\nGOT\nPUT\nTHE\nFUCK\nDOWN", "LOL\nYOUR\nJUS\nASS\nAINT\nYOU?😂", "SHUT\nTHE\nFUCK\nUP\nWEAK\nFUCKBOY", "BOW\nDOWN\nTO\nME\nSHITTY\nSLUT", "PEON\nASS\nNIGGA\nASKED\nA\nHOMELESS\nGUY\nFOR\nA\nDOLLAR", "WHO\nGAVE\nTHIS\nNIGGA\nTHE\nMIC\nLMFAOO", 
+"DIRTY\nASS\nHOBO\nLIVES\nIN\nA\nCARDBOARD\nBOX", "WHO\nTHE\nFUCK\nASKED\nBITCHMADE\nLOSER", "UGLY\nASS\nBLACK\nTHUG", "nigga\nbuilt\nlike\na\nsumo\nwreslting\nairplane", "nigga\nyo\ngranny\nlevetaties\nwhen\nshe\nclicks\nher\nankles", "frog\nwith\nvampire\nteeth\nthat\nruns\naway\nfrom\nhumans", " you\nlook\nlike\nan\niguana\nwith\na\nrocket\nboot\non", "YOU\nSHOT\nA\nHOMELESS\nMAN\nFOR\nSELLING\nCANDY", "that\nnigga\nwhitebeard\nthrew\na\npocket\nknife\nat\nyo\ntooth", "YOU\nDORK\nASS\nRUNT\nDONT\nSTEP\nTO\nYOUR\nFOUNDER", "COME\nHERE\nILL\nCHOKE\nYOU\nDIRTY\nHINDU\nIDIAN", "ILL\nFUCKING\nMURDER\nYOU\nWEAK\nSKID", 
+"ILL\nRIP\nYOUR\nINTESTINES\nOUT\nAND\nFEED\nIT\nTO\nMY\nDOG", "SAY\nIT\nWITH\nYOUR\nCHEST\nYOU\nCANT\nHANDLE\nTHE\nGREATEST", "ILL\nMAKE\nYOUR\nLIFE\nFLASH\nDUMB\nCUCK", "NIGGA\nGETS\nBEAT\nBY\nHIS\nDAD\nLOL", "YOU\nFLEX\nWEAKNESS\nAND\nCALL\nIT\nPERSONALITY\nDUMBASS\nNIGGA", "WE\nCOULD\nPUT\nU\nON\nA\nSHIRT\nRETARDED\nFUCKING\nPEDOPHILE", "WEIRD\nASS\nNIGGA\nTALKING\nTO\nME\nLIKE\nWE\nCOOL", "I\nWALK\nIN\nYOU\nVANISH\nTHATS\nREAL\nINFLUENCE", "UR\nA\nDIRTY,\nASS\nNIGGA\nAND\nNOBODY\nCARE", "UR\nMY\nFUCKING\nSON\nNIGGA\nDIED\nAND\nBLEW\nHIS\nFUCKING\nBRAINS\nOUT", "LETS\nALL\nPRAY\nFOR\nTHIS\nNIGGA\nLOOOL", "HOW\nARE\nYOU\nSO\nASS\nNIGGA\nLMAO", 
+"get\nthe\nfuck\ndown\ni\nown\nyou", "TU\nMAMÁ\nES\nMI\nPUTA", "I'll\nrip\nur\nankles\noff\nweak\nbitch", "you\nlook\nlike\na\ndinosaur\nwith\nno\nteeth", "im\ngonna\ntake\nyour\nsoul\nnow", "your\nfucking\nslow\nand\nyour\na\nindian\nloser", "you\nso\nfucking\ntrash\nbitch\nboy", "you\nugly\nas\nfuck boy\nniggas\nwill\nput\nands\non\nyou", "ur\nso\nfucking\ndogshit\nweak\ncuck\nnow\nshut\nthe\nfuck\nup\nlike\nmy\ndog", "you\nsaw\nme\nand\nyo\nbody\nshook\npussy", "yo\nindian\nshut\nthe\nfuck\nup", "Nigga\nyou\nwas\nplaying\nagario\nand\ngot\ndouble\nsplitted\nby\na\nnigga\nnamed\nTimmyTwoThumbs\nboy\nyou\nugly\nass\nretarted\nfuck", 
+"Nigga\nyou\ngot\nbanned\nfrom\nthe\nLGBTQ\nhideout\nbecause\nyou\nsaid\nsaid\nthe\ncolors\nof\nthe\nrainbow\nwere\nugly\nnigga\nyou\nstupid\nas\nfuck\nboy", "ill\nchuck\nyou\nin\na\nriver\nbitch", "even\ncancer\npatients\nhas\nmore\nlife\nthan\nyou", "this\nis\nbad\nyour\nslow\nand\ni\nown\nyou", "weird\nass\nliving\nspecial\ncreature", "ill\nput\nyou\nin\na\nchokehold\nand\nbody\nslam\nyou\nLOL", "ill\nrip\nyour\nscalp\noff\nyour\nskull", "niggas\nwill\nend\nyou\nfaggot\nthot", "slobby\ndepressed\nfuck\nshut\nthe\nfuck\nup", "shut\nthe\nfuck\nup\nyou\nadmitted\nto\nbeing\nmy\ngood\nlittle\nwhore\ndogshit\nfaggot", "nigga\nis\nsprinting\naway\nfrom\nme",
+"ill\nbeat\nthe\nfuck\noutta\nyou", "im\nfaster\nden\nyou\nslow\nlittle\nbitch", "ay\nbitch\nshut\nthe\nfuck\nup\nugly\npussy", "ugly\nass\npedophile\ni\ndont\nfuck\nwith\nyou\nfaggot", "your\nlife\nis\non\n50/50cringe\nbitch", "ill\nhumiliate\nyou\nbitch\nyou\ngot\nhoed\nby\neveryone\ngarbage\nbitch", "ill\nput\na\nrifle\nin\nyour\nmouth\nbitch\nmade\nloser\nLOLL", "you\ngot\nelectrocut\nby\nmy\neel\nloser\ndork", "im\ndissing\nyou\nnow\nwhat\nweak\nass\ndying\nslut", "your\nso\nfucking\nweird\nugly\npedo\nstop\nfucking\nlooking", "ill\nthrow\nyou\nin\na\ndumpster\nslave\ndont\nfucking\ndie\nscumbag", "your\nmy\nloser\nlittle\nbitch\nyour\nass\nas\nfuck\nwhore",
+"pedo\nfuck\nstay\naway\nfrom\nminors\nfucking\ntrash\nbitch", "ay\nfuck\nup\ndogshit\nqueer\ndo\ni\nneeda\nsmack\nthe\nfuck\noutta\nyou", "your\nmother\nisnt\nvisiting\nyour\nfuneral\nlonely\nfuck\nill\ntake\nyour\nsoul\nout\nusing\nmy\nbarehands", "bitchass\nnigga\nill bash ur head in pussy\nyour\nmy\nbitch\nweak\nfuck", "niggas\nwill\nshoot\nyour\nface\noff\nshut\nthe\nfuck\nup\nfat\nbitch", "stop\nbeing\nmy\nbitch\nfaggot\nyour\nass\nson\nand\nyour\naccuracy\nis\nshit" "watch\nthat\nfuckin\nmouth\nfaggot\nbitch\nyour\na\nnerdy\nshithead\nyour\nclit\nstinks\nim\nhere\nto\nkill\nyou", "cow\ndick\neating\nass\nnigga", "skanky\nlittle\nfaggot\nyour\nugly\nas\nfuck\nLOL", 
+"yo\ngreasy\nfaggot\nfuck\nup\nill\nbeat\nthe\nfuck\noutta\nyou", "bitch\nill\nbreak\nyo\nnose\nsit\nthe\nfuck\ndown\nfaggot", "ugly\nfaggot\ndont\nrun\nwhy\nare\nyou\nnot\ndoing\ndamage", "Nigga\nyour\nhead\nlooks\nlike\na\ndorito\nmy\nnigga\nyou\ngot\nthat\nshit\nfrom\nphineas\nand\nferb\ntell\nme\nwhy\ni\nsaw\nyou\nbeating\nyour\ndick\nto\ndora\nthe\nexplora", "I'LL\nLEAVE\nTHIS\nIMPAIRED\nREJECTS\nBODY\nIN\nA\nDITCH", "NIGGA\nDIED\nBY\nFIRING\nSQUAD", "stop\ncrying\nget\nback\nup", "skanky\nlittle\nfaggot\nyour\nugly\nas\nfuck\nLOL", "ill\nmake\nyou\nend\nyour\nlife\nfrail\nass\nbitch", "Cállate\nla\nboca\nsucio\ncriatura\nespecial\nnegro\nEntraste\na\nmi\npaís\nen\nun\ncontenedor",
+"988\nheres\nthe\nsuicide\nhotline\nfrustrated\npedo", "this\nis\nbad\ni\nfucking\nkilled\nyou" "BITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nYOU\nCANT\nCOMPETE\nWITH\nYOUR\nGOD\nBITCH\nWHY\nAM\nI\nOVER\nYOU\nSTOP\nFUCKING\nDYING\nPIGFUCKER\nLOLLOLOOL", "nigga\ni\ncaught\nu\nslapboxing\na\nnigga\nname\ndonitello\nfor\n20\nvbucks\nlike\nshit\nnigga\nyou\nwas\na\nknown\nschool\nthreat\nbecause\nyou\nbrought\na\nbaguette\nto\nschool\nfor\nbring\nyour\npet\nday\nsmelly\nnigga",
+"nigga\nthats\nwhy\nyo\nnipples\nare\nbuilt\nlike\nfour\nleaf\nclovers\nthats\nwhy\byo\nmom\nuse\nto\nuppercut\nyou\nin\nfatboy”, “you\nsmoke\nvapes\nout\nyour\nasshole\nweirdo”, “SORRY\nASS\nNIGGA\nUR\nNOT\nSAFE\nFROM\nME\nWEAK\nVIRGIN\nASS\nNIGGA\nUR\nMISERABLE\nAS\nSHIT\nFUCKING\nFAGGOT\nASS\nPEDO\nLOLOL”, “NIGGA\nHOE\nASS\nNIGGA\nDIRTY\nASS\nNIGGA\nSHUT\nUP\nNIGGA\nYOU\nWASTED\nEIGHT\nYEARS\nOF\nYOUR\nLIFE\nIN\nA\nJUNGLE\nTRYNA\nFIND\nA\nLEGENDARY\nPOKEMON\nMY\nNIGGA\nCAUSE\nYOU\nDIRTY\nAS\nFUCK\nMY\nNIGGA\nYOU\nFEEL\nBURPS\nFORM\nIN\nYO\nTHROAT\nAND\nPISS\nYO\nPANTS\nMY\nNIGGA\nYO\nMOTHER\nIS\nA\nCRACK\nADICT\nLOLOO"
 ]
 
 autoreplies = [
+    f"ur shit as fuck pedophile {name}",
+    f"She is only 5 get that dick outta her nipples u pedo ",
+    f"Yo fuck ass nigga named {name}, ur fuckin ass and u should hang urself with a dildo",
+    f"Stop tryna hit me u fuckin diddy {name}",
+    f"Fuck ass boy stop drinking horse semen",
+    f"nigga ur fuckin ass u shemale pedophile {name}",
+    f"{name} how about u kys now fucking twink",
+    f"Nigga ur fuckin ass {name}",
+    f"YO SHUT THE FUCK UP {name} LOL.",
+    f"thats why ur dad left u fuckin loser named {name}",
+    f"yo slut stop cutting ur self u fuckin retard",
+    f"bitch ass boy named {name} u killed ur self",
+    f"and this bitch ass nigga killed himself",
+    f"yo\nbitch\nshut\nthe\nfuck\nup\npedo\nass\n{name}",
+    f"stop sucking my dick u peon",
+    f"ur fuckin ass lol kys now pedo",
+    f"ur shit as fuck pedophile {name}",
+    f"She is only 5 get that dick outta her nipples u pedo named {name}",
+    f"Yo fuck ass nigga named {name}, ur fuckin ass and u should hang urself with a dildo",
+    f"Stop tryna hit me u fuckin diddy {name}",
+    f"Fuck ass boy stop drinking horse semen",
+    f"nigga ur fuckin ass u shemale pedophile {name}",
+    f"{name} how about u kys now fucking twink",
+    f"Nigga ur fuckin ass {name}",
+    f"YO SHUT THE FUCK UP {name} LOL.",
+    f"thats why ur dad left u fuckin loser named {name}",
+    f"yo slut stop cutting ur self u fuckin retard",
+    f"bitch ass boy named {name} u killed ur self",
+    f"and this bitch ass nigga killed himself",
+    f"yo\nbitch\nshut\nthe\nfuck\nup\npedo\nass{name}",
+    f"ur shit as fuck pedophile {name}",
+    f"She is only 5 get that dick outta her nipples u pedo named {name}!",
+    f"Yo fuck ass nigga named {name}, ur fuckin ass and u should hang urself with a dildo",
+    f"Stop tryna hit me u fuckin diddy {name}",
+    f"Fuck ass boy stop drinking horse semen",
+    f"nigga ur fuckin ass u shemale pedophile {name}",
+    f"{name} how about u kys now fucking twink",
+    f"Nigga ur fuckin ass {name}",
+    f"YO SHUT THE FUCK UP {name} LOL.",
+    f"thats why ur dad left u fuckin loser named {name}",
+    f"yo slut stop cutting ur self u fuckin retard {name} ",
+    f"bitch ass boy named {name} u killed ur self {name} ",
+    f"and this bitch ass nigga killed himself {name} ",
+    f"yo\nbitch\nshut\nthe\nfuck\nup\npedo\nass{name}" "cringe pedophile {name} ","ugly faggot ass pedo","drop dead maggot","niggas spit on u everywhere u go","do u still cut yourself","isnt this the dork i made eat his on feces on cam LOL","ill cave yo teeth in","dork","soft ass queer","slit your throat pedophile","weak test tube baby","they watching me rip yo teeth out with pliers","sloppy mouth faggot","im ur diety","die faggot","ur weak bitch","ill rip your tongue out","ill erdacite whats left of your species","saggy breast loser","ill send u to god faggot","I WILL FUCKING MURDER YOU WITH MY BARE HANDS JEW","rape victim","insecure cunt","deformed man boobs LOL","pathetic leech make a name for yourself","I WILL STOMP YOUR HEAD IN FRAIL FAGGOT","YO BITCH I SAID SHUT THE FUCK UP WEAK TESTICA EATING FAGGOT ILL FUCKING END YOUR BLOODLINE","freak","ew your a pedo","cringe","yo remember when u used to eat your own feces on camera","u have no friends","illnfuckingnpunchnyournfacenoff","i invoke fear into your heart","saggy breast pedo","obese loser on discord with manboobs","dork with orge ears""dirty ass rodent molester" "u cant beef me","weakling","YO\nBITCH\nSHUT\nTHE\nFUCK\nUP\nWEAK\nASS\nPEDOPHILE\nCRINGE\nCHILDTOUCHER","ill crush every bone in your body slut","frail bitch","ill lynch u nigger","trash\nass\npedophile\nlame\ndork","YO BITCH SPEAK BACK IAN TELL U TO STOP","retard","dweeb","sloppy mouth faggot","your a nobody faggot","weak shitter","nigga cant up funds LOLOLOL lame pooron","ill break your teeth n make u cough blood up for weeks","ill snap your neck faggot","cuck","shit face","kys faggot""nb cares faggot", "YOU SUCK",
+    f"dirty ass rodent molester {name} ",
+    f"weak prostitute {name} ",
+    f"stfu dork ass nigga {name} ",
+    f"garbage ass slut {name} ",
+    f"ur weak",
+    f"why am i so above u rn",
+    f"soft ass nigga",
+    f"frail slut",
+    f"ur slow as fuck",
+    f"you cant beat me",
+    f"shut the fuck up LOL",
+    f"you suck faggot ass nigga be quiet",
 ]
 
-gcn_messages = [
+gcn_messages = ["YOUR BELOW ME", "COMMIT SUICIDE LMAOAO", "LMAOO COME GET BACK IN DISCORD.GG/JUSTICE", "UR A SAD LITTLE PEDO LMAOO", "COME GET MAULED IN DISCORD.GG/JUSTICE",
+"UR JUS AS AINT YOU LMAOOO", "JUSTICE RUN THIS SHITTTT", "DIRTY HINDU BITCH", "FEMBOY ASS NIGGA"
 ]
 
-flood_messages = [
+flood_messages = ["shut the fuck up son get flooded", "weak retard is drowning", "shut the fuck up low IQ retard", "niggas ugly as fuck",
+"i dont wanna hear your little sob story faggot", "stop crying get back up", "loser ass fucking dork", "step the fuck up pussy", "u cant beef retard",
+"lol ur so sad keep crying bitch", "LOLL i dont fucking like you", "ugly ass awkward loser", "stupid little cuck", 
 ]
 
-ladder_messages = [
+ladder_messages = ["HOW\nDID\nYOU\nGET\nHOED\nLIKE\nTHAT\nLOLL\nYOUR\nA\nBITCH", "SIGN\nYOUR\nLIFE\nAWAY\nTO\nME\nLOSER\nASS\nPEDO\nLOLL","SHUR\nYOUR\nPUSSY\nASS\nMOUTH\nBITCH", "NIGGA\nGETS\nBULLIED\nON\nDAILY\nBASIS",
+"TRASH\nNIGGA\nOUTLAST\nME\nRETARD", "MORONIC\nASS\nLITTLE\nFAGGOT\nGET\nBACK\nUP", "WEAL\nASS\nCHAT\nSLAVE\nGET\nDOWN\nFUCK\nBOY", "NEVER\nCOMPETE\nWITH\nA\nGOD",
+"UR\nMY\nFUCKING\nSON\nPEASENT", "FOCUS\nUP\nRETARDED\nFUCKBOY\nLOLLOL", "NIGGA\nYOU\nCANT\nSTEP\nSHITTY\nLOSER", "SHUT\nTHE\nFUCK\nUP\nBITCHMADE\nLOSER", "LOL\nYOUR\nA\nSHITTY\nCOM\nREJECT\nLOSER",
+"YOUR\nDYING\nTO\nME\nLMFAOO", "STOP\nSTEPPING\nU\nSLOW\nBRAINED\nMORON""EGOUL\nMEU\nE MAI\nMARE\nDECÂT\nPUIUL TĂU\nNEGRU", "NU POȚI\nPROGRAMA\nNU\nAI\nNICIO\nȘANSĂ\nÎMPOTRIVA\nMIEI\nPLÂNGE",
+"MY\nMOM\nTYPES\nFASTER\nTHAN\nTHIS\nWHAT\nTHE\nFUCK\nLMFAOO"
 ]
 
-wordlist = [
+wordlist = ["fuck up anitsocial faggot", "shitty low tier pedo", "lqbtq ultra supporter", "loser ass nigga snakes his friends for epussy", "unbalanced retarded fuck","ur a retard and what?",
+"weak ass faggot", "Indian hindu bitch", "broke ass softie", "pathetic fucking cuck ", "shut the fuck up ", "dumb faggot", "sweet ass nigga", "bitch ass nigga", "dogshit loser",
+"scummy pedophile", "pedo nigga touches kids", "faggot likes little boys", "dorkus", "shiity slut", "slutty ass nigga","WATCH\nYOUR\nPUSSY\nASS\nMOUTH\nBITCH", 
+"we\ndont\nfuck\nwit\nu\nnigga", "bitchmade nigga ", "ur a cyber bully victim", "u have a hairy pussy", "dirty curry eater", "nigga got beat up by a dyke",
+"dumbass bitch ", "nobody likes u geek", "LOL your jus ass aint u?", "crack junk pedophile", "failed reject", "angered cuck", "whos this cuckable reject", "somalian freak fuck", "ur my daughter",
+"shitty subhuman", "AND UR WEAK LMFAOAOOA", "hitler crossdresser", "nigga got his rights took", "superintendent whore", "broke his neck",
+"shitcan mexican ", "ill murder ur bloodline pedo", "nigga begging for dada attention", "shut the fuck up slow ass dork","fuck up anitsocial faggot", "shitty low tier pedo", "lqbtq ultra supporter", "loser ass nigga snakes his friends for epussy", "unbalanced retarded fuck","ur a retard and what?",
+"weak ass faggot", "Indian hindu bitch", "broke ass softie", "pathetic fucking cuck ", "shut the fuck up ", "dumb faggot", "sweet ass nigga", "bitch ass nigga", "dogshit loser",
+"scummy pedophile", "pedo nigga touches kids", "faggot likes little boys", "dorkus", "trash bag", "pedo response btw", "faggot ass pedophile stay away from little boys", "stop sexualizing your mom weirdo",
+"stinky ass clown", "disowned sperm", 
 ]
 
 ping_messages = [
@@ -129,82 +256,9 @@ autoreply_tasks = {}
 status_changing_task = None
 
 
-
-init(autoreset=True)
-black = "\033[30m"
-red = "\033[31m"
-green = "\033[32m"
-yellow = "\033[33m"
-blue = "\033[34m"
-magenta = "\033[35m"
-cyan = "\033[36m"
-white = "\033[37m"
-reset = "\033[0m"  
-pink = "\033[38;2;255;192;203m"
-white = "\033[37m"
-blue = "\033[34m"
-black = "\033[30m"
-light_green = "\033[92m" 
-light_yellow = "\033[93m" 
-light_magenta = "\033[95m" 
-light_cyan = "\033[96m"  
-light_red = "\033[91m"  
-light_blue = "\033[94m" 
-www = Fore.WHITE
-mkk = Fore.BLUE
-b = Fore.BLACK
-ggg = Fore.LIGHTGREEN_EX
-y = Fore.LIGHTYELLOW_EX 
-pps = Fore.LIGHTMAGENTA_EX
-c = Fore.LIGHTCYAN_EX
-lr = Fore.LIGHTRED_EX
-qqq = Fore.MAGENTA
-lbb = Fore.LIGHTBLUE_EX
-mll = Fore.LIGHTBLUE_EX
-mjj = Fore.RED
-yyy = Fore.YELLOW
-
 @bot.event
 async def on_ready():
-    print(f"{Fore.GREEN}[SUCCESS] Token loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Bot User loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Commands loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Menu loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Page1 loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Page2 loaded successfully") 
-    print(f"{Fore.GREEN}[SUCCESS] Page3 loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Page4 loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Page5 loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Tokens config loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Multilast config loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Antigc config loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Whore config loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] RPC config loaded successfully")
-    print(f"{Fore.GREEN}[SUCCESS] Bot loaded successfully")
-    
-    
-    
-    
-
-    print(f"""
-    
-                                    {lbb} █    ██ █████████░██████████▓   
-                                    {lbb} ██   ▓█▒▒ ▒ ▒ ██░   ▒▓███
-                                    {lbb}▓██  ▒██░░ ▒ ██▒░    ░▒███    
-                                    {lbb}▓██  ▒██    ██▒░      ▒███
-                                    {lbb}▓██   ██   ██          ███
-                                    {lbb}▓▓█  ░██░ ██ ▒   ░     ██    
-                                    {lbb}▒▒█████▓ ████████▒ █████████▓░   
-                                    {lbb}▒▓▒ ▒ ▒ ░▒▒ ▓░▒░▒ ▒ ▒▒ ▓░▒░▒
-                                    {lbb} ░▒░ ░ ░ ░ ▒ ▒ ░ ▒ ▒  ▒ ░ ▒ 
-                                    {lbb}   ░       ░ ░        ▒    ▒▓ 
-
-
-
-
-{white}Made by: Uzi                                            
-{white}Welcome: {bot.user} 
-{white}Version : 2.0                                             
+    print(f"""sup faggot welcome to snowy selfbot {bot.user}                                   
                    """)
     
 
@@ -1875,20 +1929,20 @@ async def rsnipe(ctx):
 @bot.command()
 async def menu(ctx):
     await ctx.message.delete()
-    menu_message = await ctx.send("""```ansi
-         snowy selfbot           
+    menu_message = await ctx.send(f"""```ansi
+        snowy selfbot                               
 ╔═════════════════════════════╗
 ║          COMMANDS           ║ 
 ╚═════════════════════════════╝ 
- [tab1] ->  multi token        
- [tab2] ->  single token       
- [tab3] ->  utility            
- [tab4] ->  profile            
- [tab5] ->  misc                        
- [all]  ->  all cmds           
+ {white}[{black}tab1{white}] ->  multi token       
+ {white}[{black}tab2{white}] ->  single token       
+ {white}[{black}tab3{white}] ->  utility            
+ {white}[{black}tab4{white}] ->  profile            
+ {white}[{black}tab5{white}] ->  misc                        
+ {white}[{black}all{white}]  ->  all cmds           
                                  
- Commands: 54                    
- Made By: Uzi                    ```""")
+ {black}Commands: 54{white}                    
+ {black}Made By: Uzi{white}                    ```""")
     await ctx.send(f"""https://tenor.com/view/blizzard-snow-forest-dark-forest-dark-snowing-forest-gif-26760300""")
 
 
@@ -2071,5 +2125,5 @@ async def help(ctx):
     await ctx.send(f"""```dm @uzicifer for help if your looking for a menu just type {bot.command_prefix}menu ```""")
     await ctx.message.delete()
 
+bot.run('ur token ', bot=False) 
 
-bot.run('put your token here', bot=False) 
