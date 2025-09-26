@@ -51,7 +51,7 @@ mll = Fore.LIGHTBLUE_EX
 mjj = Fore.RED
 yyy = Fore.YELLOW
 
-name = "ur opps name"
+name = ""
 
 whore_wordlist = ["HOW\nDID\nYOU\nGET\nHOED\nLIKE\nTHAT\nLOLL\nYOUR\nA\nBITCH", "SIGN\nYOUR\nLIFE\nAWAY\nTO\nME\nLOSER\nASS\nPEDO\nLOLL","SHUT\nYOUR\nPUSSY\nASS\nMOUTH\nBITCH", "NIGGA\nGETS\nBULLIED\nON\nDAILY\nBASIS", "TRASH\nNIGGA\nOUTLAST\nME\nRETARD", "MORONIC\nASS\nLITTLE\nFAGGOT\nGET\nBACK\nUP", "WEAL\nASS\nCHAT\nSLAVE\nGET\nDOWN\nFUCK\nBOY", "NEVER\nCOMPETE\nWITH\nA\nGOD", "UR\nMY\nFUCKING\nSON\nPEASENT", "FOCUS\nUP\nRETARDED\nFUCKBOY\nLOLLOL", "NIGGA\nYOU\nCANT\nSTEP\nSHITTY\nLOSER", "SHUT\nTHE\nFUCK\nUP\nBITCHMADE\nLOSER", "LOL\nYOUR\nA\nSHITTY\nCOM\nREJECT\nLOSER", "YOUR\nDYING\nTO\nME\nLMFAOO", "STOP\nSTEPPING\nU\nSLOW\nBRAINED\nMORON", 
 "EGOUL\nMEU\nE MAI\nMARE\nDECÂT\nPUIUL TĂU\nNEGRU", "NU POȚI\nPROGRAMA\nNU\nAI\nNICIO\nȘANSĂ\nÎMPOTRIVA\nMIEI\nPLÂNGE", "MY\nMOM\nTYPES\nFASTER\nTHAN\nTHIS\nWHAT\nTHE\nFUCK\nLMFAOO", "RETARDED\nMORON\nLOL\nUR\nFUCKING\nWORTHLESS", "ILL\nNEVER\nFOLD\nOR\nDIE", "GET\nDROWNED\nBY\nUR\nGOD", "STEP\nTHE\nFUCK\nDOWN\nBEFORE\nA\nREAL\nSTEPPER\nMURDERS\nYOU\nUR\nMY\nLAB\nDOG\nBARK\nFOR\nUR\nGOD\nYOU\nFEMBOY\nYOU\nHAVE\nA\nCUCK\nKINK", "YOUR\nMY\nSEEDLING\nI\nGREW\nYOU\nLIKE\nA\nPLANT\nWEAK\nFUCK\nBOY", "WHO\nIS\nTHIS\nWEAK\nLOWTIER\nCLOWN", "ILL\nTEAR\nYOUR\nGUTS\nOUT\nWEAK\nUGLY\nSLOW\nDORK\nLOLLL", "I\nBROKE\nTHIS\nNIGGAS\nNECK\nLOL\nWEAKLING", 
@@ -258,7 +258,7 @@ status_changing_task = None
 
 @bot.event
 async def on_ready():
-    print(f"""sup faggot welcome to snowy selfbot {bot.user}                                   
+    print(f"""logged in as this faggot {bot.user}                                    
                    """)
     
 
@@ -1868,58 +1868,6 @@ async def gay(ctx, member: discord.Member = None):
     await ctx.send(response)
     await ctx.message.delete()
 
-snipes = {}
-edit_snipes = {}
-reaction_snipes = {}
-
-@bot.event
-async def on_message_delete(message):
-    if message.author.bot:
-        return
-    snipes[message.channel.id] = message
-
-@bot.event
-async def on_message_edit(before, after):
-    if before.author.bot:
-        return
-    edit_snipes[before.channel.id] = (before, after)
-
-@bot.event
-async def on_reaction_remove(reaction, user):
-    if user.bot:
-        return
-    reaction_snipes[reaction.message.channel.id] = (reaction, user)
-
-
-@bot.command()
-async def snipe(ctx):
-    msg = snipes.get(ctx.channel.id)
-    if not msg:
-        return await ctx.send("```nothing to snipe```")
-
-    await ctx.send(f"```{msg.author}: {msg.content or '*empty message*'}```")
-
-@bot.command()
-async def esnipe(ctx):
-    data = edit_snipes.get(ctx.channel.id)
-    if not data:
-        return await ctx.send("```nothing to esnipe```")
-
-    before, after = data
-    await ctx.send(
-        f"```{before.author} edited a message:\nbefore: {before.content or '*empty*'}\nafter: {after.content or '*empty*'}```"
-    )
-
-@bot.command()
-async def rsnipe(ctx):
-    data = reaction_snipes.get(ctx.channel.id)
-    if not data:
-        return await ctx.send("```nothing to rsnipe```")
-
-    reaction, user = data
-    await ctx.send(
-        f"```{user} removed their reaction {reaction.emoji}\nfrom a message: {reaction.message.jump_url}```"
-    )
 
 
 # MENU
@@ -1941,7 +1889,7 @@ async def menu(ctx):
  {white}[{black}tab5{white}] ->  misc                        
  {white}[{black}all{white}]  ->  all cmds           
                                  
- {black}Commands: 54{white}                    
+ {black}Commands: 53{white}                    
  {black}Made By: Uzi{white}                    ```""")
     await ctx.send(f"""https://tenor.com/view/blizzard-snow-forest-dark-forest-dark-snowing-forest-gif-26760300""")
 
@@ -2009,10 +1957,7 @@ async def tab3(ctx):
 [14] stopmass
 [15] antigc
 [16] typing 
-[17] typingoff 
-[18] snipe
-[19] esnipe
-[20] rsnipe```""")
+[17] typingoff ```""")
 
 
 @bot.command()
@@ -2097,33 +2042,33 @@ TAB3 - UTILITY
 [36]  antigc
 [37]  typing
 [38]  typingoff
-[39]  snipe
-[40]  esnipe
-[41]  rsnipe
                     
 TAB4 - PROFILE                      
-[42]  rpc
-[43]  rpcoff
-[44]  stream
-[45]  streamoff
-[46]  playing
-[47]  rstatus
-[48]  rstatusoff
-[49]  remoji
-[50]  remojioff
+[39]  rpc
+[40]  rpcoff
+[41]  stream
+[42]  streamoff
+[43]  playing
+[44]  rstatus
+[45]  rstatusoff
+[46]  remoji
+[47]  remojioff
                                       
 TAB5 - MISC                
-[51]  swat                   
-[52]  hack                
-[53]  rape   
-[54]  dick      
-[55]  gay
-[56]  z  ```""")
+[48]  swat                   
+[49]  hack                
+[50]  rape   
+[51]  dick      
+[52]  gay
+[53]  z  ```""")
 
 @bot.command()
 async def help(ctx):
     await ctx.send(f"""```dm @uzicifer for help if your looking for a menu just type {bot.command_prefix}menu ```""")
     await ctx.message.delete()
 
-bot.run('ur token ', bot=False) 
+    
+# MADE BY UZI BITCH 
+# @uzicifer
 
+bot.run('ur token here', bot=False) 
