@@ -51,7 +51,7 @@ mll = Fore.LIGHTBLUE_EX
 mjj = Fore.RED
 yyy = Fore.YELLOW
 
-name = ""
+name = ''
 
 whore_wordlist = ["HOW\nDID\nYOU\nGET\nHOED\nLIKE\nTHAT\nLOLL\nYOUR\nA\nBITCH", "SIGN\nYOUR\nLIFE\nAWAY\nTO\nME\nLOSER\nASS\nPEDO\nLOLL","SHUT\nYOUR\nPUSSY\nASS\nMOUTH\nBITCH", "NIGGA\nGETS\nBULLIED\nON\nDAILY\nBASIS", "TRASH\nNIGGA\nOUTLAST\nME\nRETARD", "MORONIC\nASS\nLITTLE\nFAGGOT\nGET\nBACK\nUP", "WEAL\nASS\nCHAT\nSLAVE\nGET\nDOWN\nFUCK\nBOY", "NEVER\nCOMPETE\nWITH\nA\nGOD", "UR\nMY\nFUCKING\nSON\nPEASENT", "FOCUS\nUP\nRETARDED\nFUCKBOY\nLOLLOL", "NIGGA\nYOU\nCANT\nSTEP\nSHITTY\nLOSER", "SHUT\nTHE\nFUCK\nUP\nBITCHMADE\nLOSER", "LOL\nYOUR\nA\nSHITTY\nCOM\nREJECT\nLOSER", "YOUR\nDYING\nTO\nME\nLMFAOO", "STOP\nSTEPPING\nU\nSLOW\nBRAINED\nMORON", 
 "EGOUL\nMEU\nE MAI\nMARE\nDECÂT\nPUIUL TĂU\nNEGRU", "NU POȚI\nPROGRAMA\nNU\nAI\nNICIO\nȘANSĂ\nÎMPOTRIVA\nMIEI\nPLÂNGE", "MY\nMOM\nTYPES\nFASTER\nTHAN\nTHIS\nWHAT\nTHE\nFUCK\nLMFAOO", "RETARDED\nMORON\nLOL\nUR\nFUCKING\nWORTHLESS", "ILL\nNEVER\nFOLD\nOR\nDIE", "GET\nDROWNED\nBY\nUR\nGOD", "STEP\nTHE\nFUCK\nDOWN\nBEFORE\nA\nREAL\nSTEPPER\nMURDERS\nYOU\nUR\nMY\nLAB\nDOG\nBARK\nFOR\nUR\nGOD\nYOU\nFEMBOY\nYOU\nHAVE\nA\nCUCK\nKINK", "YOUR\nMY\nSEEDLING\nI\nGREW\nYOU\nLIKE\nA\nPLANT\nWEAK\nFUCK\nBOY", "WHO\nIS\nTHIS\nWEAK\nLOWTIER\nCLOWN", "ILL\nTEAR\nYOUR\nGUTS\nOUT\nWEAK\nUGLY\nSLOW\nDORK\nLOLLL", "I\nBROKE\nTHIS\nNIGGAS\nNECK\nLOL\nWEAKLING", 
@@ -174,7 +174,6 @@ ping_messages = [
 ]
 
 message_index = 0  
-
 
 prefix = ''
 intents = discord.Intents.default()
@@ -1869,7 +1868,6 @@ async def gay(ctx, member: discord.Member = None):
     await ctx.message.delete()
 
 
-
 # MENU
 
 @bot.remove_command('help') 
@@ -2067,8 +2065,7 @@ async def help(ctx):
     await ctx.send(f"""```dm @uzicifer for help if your looking for a menu just type {bot.command_prefix}menu ```""")
     await ctx.message.delete()
 
-    
 # MADE BY UZI BITCH 
-# @uzicifer
+# @uzi.py
 
 bot.run('ur token here', bot=False) 
