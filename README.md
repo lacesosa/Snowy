@@ -15,7 +15,7 @@ A discord selfbot made by uzi
 ## 📬 Contact Information 
 - Youtube: [Uzi](www.youtube.com/@uziwtf)
 - Telegram: [@lacesosa](https://t.me/lacesosa)
-- Discord: [@uzicifer](https://discord.gg/justice)
+- Discord: [@uzi.py](https://discord.gg/justice)
 
 ---
 
