@@ -2062,10 +2062,11 @@ TAB5 - MISC
 
 @bot.command()
 async def help(ctx):
-    await ctx.send(f"""```dm @uzicifer for help if your looking for a menu just type {bot.command_prefix}menu ```""")
+    await ctx.send(f"""```dm @uzi.py for help if your looking for a menu just type {bot.command_prefix}menu ```""")
     await ctx.message.delete()
 
 # MADE BY UZI BITCH 
 # @uzi.py
 
 bot.run('ur token here', bot=False) 
+
